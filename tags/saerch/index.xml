@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>saerch on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/saerch/</link><description>Recent content in saerch on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 14 Mar 2015 23:04:30 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/saerch/index.xml" rel="self" type="application/rss+xml"/><item><title>Apply Tipue search on Pelican</title><link>https://blog.jaychung.tw/posts/apply-tipuesearch-on-pelican/</link><pubDate>Sat, 14 Mar 2015 23:04:30 +0800</pubDate><guid>https://blog.jaychung.tw/posts/apply-tipuesearch-on-pelican/</guid><description>每個部落格都需要「搜尋」這個功能，文章少時還好，多了以後想找就不方便。Pelican 並沒有內建文章搜尋的功能，但倒是有個滿酷的套件， Tipue Search 。
+Tipue Search Serializes generated HTML to JSON that can be used by jQuery plugin.
+簡潔有力的說明，就是將文章轉換成 JSON 檔案，搭配上 jQuery 進行文章搜尋。
+設定 / Configuration Tipue Search 在 python 的部分是仰賴 BeautifulSoup 這個套件，所以在使用前得先確定自己有沒有安裝。
+pip install beautifulsoup4 下載 Tipue Search，然後將裡面的 static 檔案放置到自己主題的目錄下。（themes/&amp;lt;your_theme&amp;gt;/static/tipuesearch/）
+下載 Tipue Search Plugin，放到 plugin 資料夾底下，如果還沒有 plugin 這個資料夾可以自己創一個。
+編輯 pelicanconf.py 然後要編輯自己的 pelicanconf.py，像我的資料夾名稱是 pelican-plugins，並且要加上 DIRECT_TEMPLATES ，確認要 parse 成 JSON 的頁面有哪些。
+PLUGIN_PATH = &amp;#39;pelican-plugins&amp;#39; PLUGINS = [&amp;#39;tipue_search&amp;#39;] DIRECT_TEMPLATES = ((&amp;#39;index&amp;#39;, &amp;#39;tags&amp;#39;, &amp;#39;categories&amp;#39;, &amp;#39;authors&amp;#39;, &amp;#39;archives&amp;#39;, &amp;#39;search&amp;#39;)) 編輯 templates 第一個部分就是先加上 css ：</description></item></channel></rss>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>opencv on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/opencv/</link><description>Recent content in opencv on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 18 May 2015 23:28:40 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/opencv/index.xml" rel="self" type="application/rss+xml"/><item><title>Mac 上安裝 OpenCV</title><link>https://blog.jaychung.tw/posts/macos-install-opencv-for-python/</link><pubDate>Mon, 18 May 2015 23:28:40 +0800</pubDate><guid>https://blog.jaychung.tw/posts/macos-install-opencv-for-python/</guid><description>OpenCV 是圖像處理裡面很猛的一個套件。之前用純 make 去安裝，每每碰壁，於是我發現 Homebrew 的美好，來記錄一下！
+安裝 / Installation 在開始之前，當然要確定自己有Homebrew。
+首先使用 doctor 檢查自己的 brew 有沒有問題
+brew doctor 然後要轉移到 science 的倉庫裡
+brew tap homebrew/science 接著就可以安裝 OpenCV 了
+brew install opencv 再來換到 OpenCV 的目錄底下（要注意自己 OpenCV 的版本）
+cd /usr/local/Cellar/opencv/2.4.11_1/ 好，上面是 homebrew 做的事情，應該是不會有什麼 error ，接下來才是要自己操作的部分，要先找到自己 python 的 library 路徑
+echo $PYTHONPATH 像我個人是在這裡
+cd /usr/local/lib/python2.7/site-packages 最後要將 OpenCV 編譯過的文件 link 到 library 下
+ln -s /usr/local/Cellar/opencv/2.4.11_1/lib/python2.7/site-packages/cv.py cv.py ln -s /usr/local/Cellar/opencv/2.4.11_1/lib/python2.7/site-packages/cv2.so cv2.so 這樣大致上就完成啦！
+import cv2</description></item></channel></rss>

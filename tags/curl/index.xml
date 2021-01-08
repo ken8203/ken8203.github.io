@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>curl on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/curl/</link><description>Recent content in curl on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 28 Jan 2018 23:20:06 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/curl/index.xml" rel="self" type="application/rss+xml"/><item><title>PHP cURL Note</title><link>https://blog.jaychung.tw/posts/php-crul-note/</link><pubDate>Sun, 28 Jan 2018 23:20:06 +0800</pubDate><guid>https://blog.jaychung.tw/posts/php-crul-note/</guid><description>平時在做 request 都是用別人刻好的 library ，Python 用 requests，而 PHP 就用 Guzzle 之類的。但&amp;hellip;畢竟開始工作了，想說幫專案減少一點相依性，原生的功能做得到就盡量少用別人的。
+結果就出事了。以後還是直接用 Guzzle 好了
+所以寫篇文章來紀錄一下&amp;hellip;
+一般來說，使用 cURL 會這樣子呼叫
+$ch = curl_init(); curl_setopt($ch, CURLOPT_URL,&amp;#34;http://www.example.com&amp;#34;); curl_setopt($ch, CURLOPT_HEADER, false); $response = curl_exec($ch); curl_close($ch); 這樣會有一個問題，就是如果成功了，他會默默幫你輸出一個字串 ok，然後你的 API 回應就會變成
+ok{ &amp;#34;data&amp;#34;: { &amp;#34;key&amp;#34;: &amp;#34;value&amp;#34; } } 這樣很尷尬，會導致 client 端 parse 錯誤，然後服務就爆了。那要如何不印出 ok 這個字樣呢？
+$ch = curl_init(); curl_setopt($ch, CURLOPT_URL,&amp;#34;http://www.example.com&amp;#34;); curl_setopt($ch, CURLOPT_HEADER, false); curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); $response = curl_exec($ch); curl_close($ch); 其實只需要多加一行就可以了，但這也是 cURL 的缺點，需要設定的參數太多了。不過事情就是這樣，有利有弊，端看自己如何選擇。雖然麻煩一點，但可以減少專案的相依性，感覺還是挺不錯的！
+P.S. 參數太多是怎樣一個多法呢？可以參考：http://php.net/manual/en/function.curl-setopt.php</description></item></channel></rss>

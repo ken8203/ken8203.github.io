@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>procmail on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/procmail/</link><description>Recent content in procmail on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 29 Mar 2016 23:19:00 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/procmail/index.xml" rel="self" type="application/rss+xml"/><item><title>Procmail Pipe to Python Script</title><link>https://blog.jaychung.tw/posts/procmail-pipe-to-python-script/</link><pubDate>Tue, 29 Mar 2016 23:19:00 +0800</pubDate><guid>https://blog.jaychung.tw/posts/procmail-pipe-to-python-script/</guid><description>我們每天都在收信，那有沒有某些信件是你想挑出來，特別處理的？有的話可以使用 procmail 這個程式來幫你。
+首先你家目錄下的 .forward 檔案內容必須是
+&amp;#34;|/usr/local/bin/procmail&amp;#34; 確定信件會被 pipe 給 procmail 處理。
+那現在重點會擺在 .procmailrc 這個檔案，這裡只會粗淺的講一下實現「用 procmail 將信件傳遞給 script 執行」。
+假設我想要將從 ken8203@love.com 寄來的信傳至 mail_processing.py 做處理
+:0Wc: * ^From.*ken8203@love.com | /usr/local/bin/python $HOME/mail_processing.py 如此一來就可以正確的執行了，更細節的 filter 寫法可以到網路上查查，挺多的！
+OK，那 mail_processing.py 的改怎麼寫，才可以接住 pipe 過來的內容
+# -*- coding: utf-8 -*- import sys import email full_msg = sys.stdin.readlines() msg = email.message_from_string(&amp;#39;&amp;#39;.join(full_msg)) with open(&amp;#39;mail.txt&amp;#39;, &amp;#39;w&amp;#39;) as fout: fout.write(msg[&amp;#39;to&amp;#39;] + &amp;#39;\n&amp;#39;) fout.write(msg[&amp;#39;from&amp;#39;] + &amp;#39;\n&amp;#39;) fout.write(&amp;#39;&amp;#39;.join(full_msg)) 就是這麼簡單！
+Note 如果你的 mail.txt 遲遲不出來（有時候會 delay 一下，讓子彈飛一會兒），你可以考慮寫進 log 看看問題在哪，修改一下 .</description></item></channel></rss>

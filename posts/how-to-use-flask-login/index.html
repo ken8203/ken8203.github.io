@@ -1,0 +1,113 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>How to Use Flask Login &#183; Hi im jaychung</title><link rel=stylesheet href=https://blog.jaychung.tw/css/slim.css><link rel=stylesheet href=https://blog.jaychung.tw/css/highlight.min.css><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro" rel=stylesheet type=text/css><link rel=apple-touch-icon-precomposed sizes=144x144 href=/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=/favicon.ico></head><body><div class=container><div class=header><h1 class=site-title><a href=https://blog.jaychung.tw/>Hi im jaychung</a></h1><p class=site-tagline></p><div class=nav><a class=nav-btn href=#><span class="ci ci-burger"></span></a><ul class=nav-list><li class=spacer>&ac;</li><li><a href=https://github.com/ken8203>Github</a></li><li><a href=https://twitter.com/jaychungtw>Twitter</a></li></ul></div></div><div class=content><div class=post><h2 class=post-title><a href=https://blog.jaychung.tw/posts/how-to-use-flask-login/>How to Use Flask Login</a></h2><div class=post-content><h2 id=flask-login-可以做什麼>Flask-Login 可以做什麼？</h2><blockquote><p>Flask-Login provides user session management for Flask. It handles the common tasks of logging in, logging out, and remembering your users’ sessions over extended periods of time.</p></blockquote><p>簡而言之就是替網站管理 session，這裡只說明最一般的用法，其功能當然不僅於此，如有需要可以參考 <a href=https://flask-login.readthedocs.org/en/latest/>官方的說明文件</a>。</p><h2 id=1-安裝--installation>1. 安裝 / Installation</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>pip install Flask-Login
+</code></pre></div><h2 id=2-設定--configuration>2. 設定 / Configuration</h2><p>首先必須將整個 app 套用 LoginManager</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># app.py</span>
+<span style=color:#f92672>from</span> flask <span style=color:#f92672>import</span> Flask
+<span style=color:#f92672>from</span> flask.ext.login <span style=color:#f92672>import</span> LoginManager
+
+app <span style=color:#f92672>=</span> Flask(__name__)
+login_manager <span style=color:#f92672>=</span> LoginManager()
+login_manager<span style=color:#f92672>.</span>init_app(app)
+
+<span style=color:#75715e>#...</span>
+</code></pre></div><p>接下來是使用者（User）的model部分，有兩種方式，第一種是自行新增 function：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># models.py</span>
+<span style=color:#f92672>from</span> app <span style=color:#f92672>import</span> db
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>User</span>(db<span style=color:#f92672>.</span>Model):
+	__tablename__ <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;user&#39;</span>
+
+	id <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>Integer, primary_key<span style=color:#f92672>=</span>True)
+	username <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+	password <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+	email <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+
+	<span style=color:#66d9ef>def</span> __init__(self, username<span style=color:#f92672>=</span>None, password<span style=color:#f92672>=</span>None, email<span style=color:#f92672>=</span>None):
+		self<span style=color:#f92672>.</span>username <span style=color:#f92672>=</span> username
+		self<span style=color:#f92672>.</span>password <span style=color:#f92672>=</span> password
+		self<span style=color:#f92672>.</span>email <span style=color:#f92672>=</span> email
+
+	<span style=color:#66d9ef>def</span> __repr__(self):
+		<span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#39;&lt;User </span><span style=color:#e6db74>%r</span><span style=color:#e6db74>&gt;&#39;</span> <span style=color:#f92672>%</span> self<span style=color:#f92672>.</span>username
+
+	<span style=color:#75715e># 新增下面四個 function</span>
+	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_authenticated</span>(self):
+		<span style=color:#66d9ef>return</span> True
+
+	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_active</span>(self):
+		<span style=color:#66d9ef>return</span> True
+
+	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>is_anonymous</span>(self):
+		<span style=color:#66d9ef>return</span> False
+
+	<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_id</span>(self):
+		<span style=color:#66d9ef>return</span> unicode(self<span style=color:#f92672>.</span>id)
+</code></pre></div><p>或是直接繼承 UserMixin：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># models.py</span>
+<span style=color:#f92672>from</span> flask.ext.login <span style=color:#f92672>import</span> UserMixin
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>User</span>(UserMixin):
+	__tablename__ <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;user&#39;</span>
+
+	id <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>Integer, primary_key<span style=color:#f92672>=</span>True)
+	username <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+	password <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+	email <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>Column(db<span style=color:#f92672>.</span>String(<span style=color:#ae81ff>100</span>))
+
+	<span style=color:#66d9ef>def</span> __init__(self, username<span style=color:#f92672>=</span>None, password<span style=color:#f92672>=</span>None, email<span style=color:#f92672>=</span>None):
+		self<span style=color:#f92672>.</span>username <span style=color:#f92672>=</span> username
+		self<span style=color:#f92672>.</span>password <span style=color:#f92672>=</span> password
+		self<span style=color:#f92672>.</span>email <span style=color:#f92672>=</span> email
+</code></pre></div><h2 id=3-使用--usage>3. 使用 / Usage</h2><p>使用的部分當然是在 views.py 上著墨了，首先要定義 load_user，確保網站的 current_user，記住傳入的 id 型態必須是 unicode：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># views.py</span>
+<span style=color:#f92672>from</span> flask <span style=color:#f92672>import</span> render_template
+<span style=color:#f92672>from</span> app <span style=color:#f92672>import</span> app, db, login_manager, bcrypt
+<span style=color:#f92672>from</span> flask.ext.login <span style=color:#f92672>import</span> current_user, login_required, login_user, logout_user
+
+<span style=color:#75715e>#...</span>
+
+<span style=color:#a6e22e>@login_manager.user_loader</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_user</span>(id):
+	user <span style=color:#f92672>=</span> User<span style=color:#f92672>.</span>query<span style=color:#f92672>.</span>filter_by(id<span style=color:#f92672>=</span>id)<span style=color:#f92672>.</span>first()
+	<span style=color:#66d9ef>return</span> user
+
+<span style=color:#75715e>#...</span>
+</code></pre></div><p>再來是 login，其實大部份與一般 login 差不多，只是額外使用 login_user：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># views.py</span>
+<span style=color:#f92672>from</span> flask <span style=color:#f92672>import</span> render_template, redirect
+<span style=color:#f92672>from</span> app <span style=color:#f92672>import</span> app, db, login_manager, bcrypt
+<span style=color:#f92672>from</span> models <span style=color:#f92672>import</span> User
+<span style=color:#f92672>from</span> flask.ext.login <span style=color:#f92672>import</span> current_user, login_required, login_user, logout_user
+
+<span style=color:#75715e>#...</span>
+
+<span style=color:#a6e22e>@login_manager.user_loader</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_user</span>(id):
+	user <span style=color:#f92672>=</span> User<span style=color:#f92672>.</span>query<span style=color:#f92672>.</span>filter_by(id<span style=color:#f92672>=</span>id)<span style=color:#f92672>.</span>first()
+	<span style=color:#66d9ef>return</span> user
+
+<span style=color:#a6e22e>@app.route</span>(<span style=color:#e6db74>&#39;/login&#39;</span>, methods<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;GET&#39;</span>, <span style=color:#e6db74>&#39;POST&#39;</span>])
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>login</span>():
+	<span style=color:#66d9ef>if</span> request<span style=color:#f92672>.</span>method <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;POST&#39;</span>:
+		user <span style=color:#f92672>=</span> User<span style=color:#f92672>.</span>query<span style=color:#f92672>.</span>filter_by(username<span style=color:#f92672>=</span>request<span style=color:#f92672>.</span>form[<span style=color:#e6db74>&#39;username&#39;</span>])<span style=color:#f92672>.</span>first()
+		<span style=color:#66d9ef>if</span> user <span style=color:#f92672>and</span> bcrypt<span style=color:#f92672>.</span>check_password_hash(user<span style=color:#f92672>.</span>password, request<span style=color:#f92672>.</span>form[<span style=color:#e6db74>&#39;password&#39;</span>]):
+			<span style=color:#75715e># 儲存 session</span>
+			login_user(user)
+			<span style=color:#66d9ef>return</span> redirect(url_for(<span style=color:#e6db74>&#39;index&#39;</span>))
+	<span style=color:#66d9ef>return</span> render_template(<span style=color:#e6db74>&#39;login.html&#39;</span>)
+
+<span style=color:#75715e>#...</span>
+</code></pre></div><p>網站一定都會有需要登入才能訪問的頁面，對此只需要在該個 view function 上加一個 decorator 即可：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># views.py</span>
+
+<span style=color:#75715e>#...</span>
+
+<span style=color:#a6e22e>@app.route</span>(<span style=color:#e6db74>&#34;/dashboard&#34;</span>)
+<span style=color:#a6e22e>@login_required</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dashboard</span>():
+	<span style=color:#66d9ef>return</span> render_template(<span style=color:#e6db74>&#39;dashboard.html&#39;</span>)
+
+<span style=color:#75715e>#...</span>
+</code></pre></div><h2 id=4-其他較常使用>4. 其他較常使用</h2><h4 id=logout>Logout</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@app.route</span>(<span style=color:#e6db74>&#34;/logout&#34;</span>)
+<span style=color:#a6e22e>@login_required</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>logout</span>():
+	logout_user()
+	<span style=color:#66d9ef>return</span> redirect(url_for(<span style=color:#e6db74>&#39;login&#39;</span>))
+</code></pre></div><h4 id=unauthorized-handler>Unauthorized Handler</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#a6e22e>@login_manager.unauthorized_handler</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>unauthorized</span>():
+	<span style=color:#75715e># do stuff</span>
+	<span style=color:#66d9ef>return</span> redirect(url_for(<span style=color:#e6db74>&#39;login&#39;</span>))
+</code></pre></div></div></div></div><div class=footer><p>Copyright © 2020. Powered by Hugo.</p></div></div><script src=https://blog.jaychung.tw/js/slim.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-56558534-1','auto');ga('send','pageview');</script></body></html>

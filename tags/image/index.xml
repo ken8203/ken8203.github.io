@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>image on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/image/</link><description>Recent content in image on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 15 Feb 2015 23:21:27 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>Apply Fancybox on Pelican</title><link>https://blog.jaychung.tw/posts/apply-fancybox-on-pelican/</link><pubDate>Sun, 15 Feb 2015 23:21:27 +0800</pubDate><guid>https://blog.jaychung.tw/posts/apply-fancybox-on-pelican/</guid><description>&lt;h2 id="fancybox-是什麼">Fancybox 是什麼？&lt;/h2>
+&lt;p>我們先看看官方說明&lt;/p>
+&lt;blockquote>
+&lt;p>fancyBox is a tool that offers a nice and elegant way to add zooming functionality for images, html content and multi-media on your webpages. It is built on the top of the popular JavaScript framework jQuery and is both easy to implement and a snap to customize.&lt;/p>
+&lt;/blockquote>
+&lt;p>重點就是達到 &lt;strong>zooming&lt;/strong> 的感覺。&lt;/p></description></item></channel></rss>

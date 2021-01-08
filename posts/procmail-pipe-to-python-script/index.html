@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Procmail Pipe to Python Script &#183; Hi im jaychung</title><link rel=stylesheet href=https://blog.jaychung.tw/css/slim.css><link rel=stylesheet href=https://blog.jaychung.tw/css/highlight.min.css><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Source+Code+Pro" rel=stylesheet type=text/css><link rel=apple-touch-icon-precomposed sizes=144x144 href=/apple-touch-icon-144-precomposed.png><link rel="shortcut icon" href=/favicon.ico></head><body><div class=container><div class=header><h1 class=site-title><a href=https://blog.jaychung.tw/>Hi im jaychung</a></h1><p class=site-tagline></p><div class=nav><a class=nav-btn href=#><span class="ci ci-burger"></span></a><ul class=nav-list><li class=spacer>&ac;</li><li><a href=https://github.com/ken8203>Github</a></li><li><a href=https://twitter.com/jaychungtw>Twitter</a></li></ul></div></div><div class=content><div class=post><h2 class=post-title><a href=https://blog.jaychung.tw/posts/procmail-pipe-to-python-script/>Procmail Pipe to Python Script</a></h2><div class=post-content><p>我們每天都在收信，那有沒有某些信件是你想挑出來，特別處理的？有的話可以使用 <a href=https://en.wikipedia.org/wiki/Procmail>procmail</a> 這個程式來幫你。</p><p>首先你家目錄下的 <code>.forward</code> 檔案內容必須是</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=color:#e6db74>&#34;|/usr/local/bin/procmail&#34;</span>
+</code></pre></div><p>確定信件會被 pipe 給 procmail 處理。</p><p>那現在重點會擺在 <code>.procmailrc</code> 這個檔案，這裡只會粗淺的講一下實現「用 procmail 將信件傳遞給 script 執行」。</p><p>假設我想要將從 <code>ken8203@love.com</code> 寄來的信傳至 <code>mail_processing.py</code> 做處理</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>:0Wc:
+* ^From.*ken8203@love.com
+| /usr/local/bin/python $HOME/mail_processing.py
+</code></pre></div><p>如此一來就可以正確的執行了，更細節的 filter 寫法可以到網路上查查，挺多的！</p><p>OK，那 <code>mail_processing.py</code> 的改怎麼寫，才可以接住 pipe 過來的內容</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#75715e># -*- coding: utf-8 -*-</span>
+
+<span style=color:#f92672>import</span> sys
+<span style=color:#f92672>import</span> email
+
+full_msg <span style=color:#f92672>=</span> sys<span style=color:#f92672>.</span>stdin<span style=color:#f92672>.</span>readlines()
+msg <span style=color:#f92672>=</span> email<span style=color:#f92672>.</span>message_from_string(<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(full_msg))
+
+<span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#39;mail.txt&#39;</span>, <span style=color:#e6db74>&#39;w&#39;</span>) <span style=color:#66d9ef>as</span> fout:
+    fout<span style=color:#f92672>.</span>write(msg[<span style=color:#e6db74>&#39;to&#39;</span>] <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#39;</span>)
+    fout<span style=color:#f92672>.</span>write(msg[<span style=color:#e6db74>&#39;from&#39;</span>] <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#39;</span>)
+    fout<span style=color:#f92672>.</span>write(<span style=color:#e6db74>&#39;&#39;</span><span style=color:#f92672>.</span>join(full_msg))
+</code></pre></div><p>就是這麼簡單！</p><h2 id=note>Note</h2><p>如果你的 <code>mail.txt</code> 遲遲不出來（有時候會 delay 一下，讓子彈飛一會兒），你可以考慮寫進 log 看看問題在哪，修改一下 <code>.procmailrc</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh>VERBOSE<span style=color:#f92672>=</span>on
+LOGFILE<span style=color:#f92672>=</span>$HOME/procmail.log
+
+:0Wc:
+* ^From.*ken8203@love.com
+| /usr/local/bin/python $HOME/mail_processing.py
+</code></pre></div><p>加入1~2行，就能自己 debug 囉！</p></div></div></div><div class=footer><p>Copyright © 2020. Powered by Hugo.</p></div></div><script src=https://blog.jaychung.tw/js/slim.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-56558534-1','auto');ga('send','pageview');</script></body></html>

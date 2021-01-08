@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>life on Hi im jaychung</title><link>https://blog.jaychung.tw/tags/life/</link><description>Recent content in life on Hi im jaychung</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 09 Dec 2017 11:43:59 +0800</lastBuildDate><atom:link href="https://blog.jaychung.tw/tags/life/index.xml" rel="self" type="application/rss+xml"/><item><title>這陣子</title><link>https://blog.jaychung.tw/posts/after-working/</link><pubDate>Sat, 09 Dec 2017 11:43:59 +0800</pubDate><guid>https://blog.jaychung.tw/posts/after-working/</guid><description>這陣子做了幾件事：
+成功嶺秋令營 開始工作 從 Pelican 搬到 Ghost 開始工作後沒多久，就想著應該要繼續寫 Blog ，最主要是能紀錄工作上碰到的問題，其次寫點東西也好。從成功嶺下來只有兩個多禮拜，卻覺得過了好久，跟以前很不一樣了呢。最顯著的差別是宵夜，上班後就幾乎沒在吃宵夜了，總想著要快點睡，不像以前十二點一到就餓慘。
+至於為什麼要從 Pelican 搬到 Ghost ？倒也不是 Pelican 不好用，只是覺著要有個編輯器，打起來比較舒服。除了這點，其他的大概沒什麼變，一樣是 host 在 github page 上。
+在搬家的過程遇到一點障礙，可能是 Pelican 的用戶太少了，所以沒有現成的 pelican -&amp;gt; ghost migrator，雖然舊的文章也沒幾篇，但我畢竟是個念舊的人，少歸少總得接過來，於是 Pghost 就誕生了！
+接下來，希望每個禮拜都能寫一篇文章，應該還行
+吧</description></item></channel></rss>
